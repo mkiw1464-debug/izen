@@ -1,0 +1,38 @@
+name: Build Zen Popup
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Theos
+        run: |
+          git clone --recursive https://github.com/theos/theos.git ~/theos
+          echo "THEOS=~/theos" >> $GITHUB_ENV
+
+      - name: Install SDK
+        run: |
+          curl -LO https://github.com/theos/sdks/raw/master/iPhoneOS13.5.sdk.tar.xz
+          sudo mkdir -p ~/theos/sdks
+          sudo tar -xf iPhoneOS13.5.sdk.tar.xz -C ~/theos/sdks
+
+      - name: Build
+        run: make package
+
+      - name: Upload .deb
+        uses: actions/upload-artifact@v4
+        with:
+          name: zenpopup-deb
+          path: packages/*.deb
+
+      - name: Upload .dylib
+        uses: actions/upload-artifact@v4
+        with:
+          name: zenpopup-dylib
+          path: .theos/obj/debug/*.dylib
