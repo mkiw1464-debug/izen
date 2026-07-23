@@ -1,0 +1,9 @@
+Package: com.zen.popup
+Name: zenpopup
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Show izen.lol popup on app launch
+Maintainer: Zen
+Author: Zen
+Section: Tweaks
+Depends: mobilesubstrate
